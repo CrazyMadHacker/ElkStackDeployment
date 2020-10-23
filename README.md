@@ -11,58 +11,6 @@ This document contains the following details:
 
 These files have been tested and used to generate a live ELK deployment on Azure. They can be used to either recreate the entire deployment pictured above. Alternatively, select portions of the playbook file may be used to install only certain pieces of it, such as Filebeat.
 
-```yaml
----
-# install_elk.yml
-- name: Configure Elk VM with Docker
-  hosts: elkservers
-  remote_user: elk
-  become: true
-  tasks:
-    # Use apt module
-    - name: Install docker.io
-      apt:
-        update_cache: yes
-        name: docker.io
-        state: present
-
-      # Use apt module
-    - name: Install pip3
-      apt:
-        force_apt_get: yes
-        name: python3-pip
-        state: present
-
-      # Use pip module
-    - name: Install Docker python module
-      pip:
-        name: docker
-        state: present
-
-      # Use command module
-    - name: Increase virtual memory
-      command: sysctl -w vm.max_map_count=262144
-
-      # Use sysctl module
-    - name: Use more memory
-      sysctl:
-        name: vm.max_map_count
-        value: "262144"
-        state: present
-        reload: yes
-
-      # Use docker_container module
-    - name: download and launch a docker elk container
-      docker_container:
-        name: elk
-        image: sebp/elk:761
-        state: started
-        restart_policy: always
-        published_ports:
-          - 5601:5601
-          - 9200:9200
-          - 5044:5044
-```
 
 
 ### Description of the Topology
@@ -111,9 +59,11 @@ A summary of the access policies in place can be found in the table below.
 Ansible was used to automate configuration of the ELK machine. No configuration was performed manually, which is advantageous because ansible is easy to learn to configure and playbooks are written in YAML to automate all the configuration.
 
 The playbook implements the following tasks:
-- _TODO: In 3-5 bullets, explain the steps of the ELK installation play. E.g., install Docker; download image; etc._
-- ...
-- ...
+- Install or update docker to the latest version
+- Install PIP that manages required dependancies
+- Install python interperter to execute python programs
+- Increase memory count to meet prerequisites
+- Download and launch docker elk container
 
 The following screenshot displays the result of running `docker ps` after successfully configuring the ELK instance.
 
@@ -122,19 +72,41 @@ The following screenshot displays the result of running `docker ps` after succes
 
 ### Target Machines & Beats
 This ELK server is configured to monitor the following machines:
-- _TODO: List the IP addresses of the machines you are monitoring_
+- Web 1 10.0.0.5
+- Web 2 10.0.0.3
+- Web 3 10.0.0.7
 
 We have installed the following Beats on these machines:
-- _TODO: Specify which Beats you successfully installed_
+- Filebeat
+- Metricbeat
 
 These Beats allow us to collect the following information from each machine:
-- _TODO: In 1-2 sentences, explain what kind of data each beat collects, and provide 1 example of what you expect to see. E.g., `Winlogbeat` collects Windows logs, which we use to track user logon events, etc._
+- Filebeat detects changes to the filesystem
+- Metricbeat detects changes in system metrics
 
 ### Using the Playbook
-In order to use the playbook, you will need to have an Ansible control node already configured. Assuming you have such a control node provisioned: 
 
-SSH into the control node and follow the steps below:
-- Copy the _____ file to _____.
+Configuration Files Needed:
+
+  - [ELK Playbook](config_files/elk-playbook.yml)
+  - [Filebeat Configuration](config_files/filebeat-configuration.yml)
+  - [Filebeat Playbook](config_files/filebeat-playbook.yml)
+  
+In order to use the playbook, you will need to have an Ansible control node already configured.  
+
+- SSH into the control node `ssh username@jump.box.ip`
+- Locate the container name `sudo docker container list -a`
+- Start the container `sudo docker container start container_name`
+- Connect to the container `sudo docker container attach container_name`
+
+Configuration files needed for Ansible:
+  - [Ansible Configuration File](config_files/ansible.cfg)
+  remote_user will need to be changed to your username
+  - [Ansible Hosts File](config_files/hosts)
+  This is where you define the webservers and elkserver IPs.
+
+
+- Copy the playbooks to the Ansible Control Node, in this case we are using the jumpbox.
 - Update the _____ file to include...
 - Run the playbook, and navigate to ____ to check that the installation worked as expected.
 
