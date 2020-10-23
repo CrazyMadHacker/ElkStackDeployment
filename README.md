@@ -2,14 +2,15 @@
 
 This document contains the following details:
 - Description of the Topology
+- Access Policies
 - ELK Configuration
   - Beats in Use
   - Machines Being Monitored
 - How to Use the Ansible Build
-- Access Policies
 
 
-These files have been tested and used to generate a live ELK deployment on Azure. They can be used to either recreate the entire deployment pictured above. Alternatively, select portions of the playbook file may be used to install only certain pieces of it, such as Filebeat.
+
+These files have been tested and used to generate a live ELK deployment on Azure. They can be used to recreate the entire deployment pictured below. Alternatively, select portions of the playbook file may be used to install only certain pieces of it, such as Filebeat.
 
 
 
@@ -19,11 +20,9 @@ These files have been tested and used to generate a live ELK deployment on Azure
 
 The main purpose of this network is to expose a load-balanced and monitored instance of DVWA, the D*mn Vulnerable Web Application.
 
-Load balancing ensures that the application will be highly available, in addition to restricting inbound access to the network. The load balancers processes incoming traffic to be shared acorss the web servers. Aces controls that are in place will ensure that only authorized users will be able to connect in the first place through the jump box into the virtual network. 
+Load balancing ensures that the application will be highly available, in addition to restricting inbound access to the network. The load balancers processes incoming traffic to be shared acorss the web servers. Access controls that are in place will ensure that only authorized users will be able to connect in the first place through the jump box into the virtual network. 
 
 Integrating an ELK server allows users to easily monitor the vulnerable VMs for changes to the file systems of the VMs on the network and system metrics.
-- **Filebeat**: Detects changes with the filesystem
-- **Metricbeat**: Detects changes in systesm metric, resouce usage and differnt types of login events.
 
 The configuration details of each machine may be found below.
 
@@ -39,7 +38,7 @@ The configuration details of each machine may be found below.
 
 The machines on the internal network are not exposed to the public Internet. 
 
-Only the jumpbox machine can accept connections from the Internet. Access to this machine is only allowed from the following IP addresses: 108.90.5.154
+Only the jumpbox machine can accept connections from the Internet. Access to this machine is only allowed from my public IP address.
 
 Machines within the network can only be accessed by each other.
 The Web 1, Web2 and Web 3 VMs send traffic to the ELK server.
@@ -62,7 +61,7 @@ The playbook implements the following tasks:
 - Install or update docker to the latest version
 - Install PIP that manages required dependancies
 - Install python interperter to execute python programs
-- Increase memory count to meet prerequisites
+- Increase memory count to meet [prerequisites for ELK](https://elk-docker.readthedocs.io/#prerequisites)
 - Download and launch docker elk container
 
 The following screenshot displays the result of running `docker ps` after successfully configuring the ELK instance.
@@ -81,30 +80,61 @@ We have installed the following Beats on these machines:
 - Metricbeat
 
 These Beats allow us to collect the following information from each machine:
-- Filebeat detects changes to the filesystem
-- Metricbeat detects changes in system metrics
+- **Filebeat**: Monitors log files or locations you specify on remote machines that its installed on. 
+- **Metricbeat**: Detects changes in systesm metrics and different types of error events.
 
-### Using the Playbook
+### Using the Playbooks
 
-Configuration Files Needed:
-  - [Filebeat Configuration](config_files/filebeat-configuration.yml)
+Playbooks are the To-Do list for Ansible that contain the steps to execute on the servers. In this case, our playbooks are going to download, install and configure our ELK and beats deployment. The playbooks need to be copied to the /etc/ansible directory and it's important that the path and file name of the config files match whats in the playbook.
 
   
-In order to use the playbook, you will need to have an Ansible control node already configured.  
+In order to use the playbook, you will need to have an Ansible already configured. We are using the jumpbox for this purpose.  
 
-- SSH into the control node `ssh username@jump.box.ip`
+- SSH into the jumpbox `ssh username@jump.box.ip`
 - Locate the container name `sudo docker container list -a`
 - Start the container `sudo docker container start container_name`
 - Connect to the container `sudo docker container attach container_name`
 
-Configuration files needed for Ansible:
+Configuration files needed for Ansible located in /etc/ansible:
   - [Ansible Configuration File](config_files/ansible.cfg) **remote_user will need to be changed to your username**
-  - [Ansible Hosts File](config_files/hosts) **This is where you define the webservers and elkserver IPs.**
+  ```bash
+  #remote_port    = 22
+#module_lang    = C
+#module_set_locale = False
+remote_user = #CHANGE TO YOUR USERNAME
+```
+  - [Ansible Hosts File](config_files/hosts) **This is where you define the [webservers] and [elkserver] IPs.**
+```bash
+# List the IP Addresses of your webservers
+# You should have at least 2 IP addresses
+[webservers]
+X.X.X.X ansible_python_interpreter=/usr/bin/python3
+X.X.X.X ansible_python_interpreter=/usr/bin/python3
 
-Copy the playbooks to the Ansible Control Node /etc/ansible folder.
+
+# List the IP address of your ELK server
+# There should only be one IP address
+[elkservers]
+X.X.X.X ansible_python_interpreter=/usr/bin/python3
+```
+Copy the playbooks to the /etc/ansible folder.
   - [ELK Playbook](config_files/elk-playbook.yml) **remote_user will need to be changed to your username**
+  ```bash
+  hosts: elkservers
+  remote_user: ##CHANGE TO YOUR USERNAME
+  become: true
+```
   - [Filebeat Playbook](config_files/filebeat-playbook.yml)
-- Run the playbook 'ansible-playbook elk-playbook.yml', and navigate to ____ to check that the installation worked as expected.
+- Run the playbook `ansible-playbook elk-playbook.yml`, and navigate to http://[your.VM.IP]:5601/app/kibana to check that the installation worked as expected.
+
+In order to install filebeat, the [Filebeat Configuration](config_files/filebeat-configuration.yml) will need to be copied to the /etc/ansible/files/ directory and the following IPs updated.
+- Scroll to line #1105 and replace the IP address with the IP address of your ELK machine.
+![](Images/Line1105.png)
+
+Scroll to line #1805 and replace the IP address with the IP address of your ELK machine.
+![](Images/Line1805.png)
+
+After entering your information into the Filebeat configuration file, navigate to the /etc/ansible directory and run: `ansible-playbook filebeat-playbook.yml webservers`
 
 _TODO: Answer the following questions to fill in the blanks:_
 - _Which file is the playbook? Where do you copy it?_
@@ -112,3 +142,5 @@ _TODO: Answer the following questions to fill in the blanks:_
 - _Which URL do you navigate to in order to check that the ELK server is running?
 
 _As a **Bonus**, provide the specific commands the user will need to run to download the playbook, update the files, etc._
+
+## Troubleshooting
