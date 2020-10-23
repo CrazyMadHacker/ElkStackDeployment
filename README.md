@@ -87,10 +87,8 @@ These Beats allow us to collect the following information from each machine:
 ### Using the Playbook
 
 Configuration Files Needed:
-
-  - [ELK Playbook](config_files/elk-playbook.yml)
   - [Filebeat Configuration](config_files/filebeat-configuration.yml)
-  - [Filebeat Playbook](config_files/filebeat-playbook.yml)
+
   
 In order to use the playbook, you will need to have an Ansible control node already configured.  
 
@@ -100,15 +98,13 @@ In order to use the playbook, you will need to have an Ansible control node alre
 - Connect to the container `sudo docker container attach container_name`
 
 Configuration files needed for Ansible:
-  - [Ansible Configuration File](config_files/ansible.cfg)
-  remote_user will need to be changed to your username
-  - [Ansible Hosts File](config_files/hosts)
-  This is where you define the webservers and elkserver IPs.
+  - [Ansible Configuration File](config_files/ansible.cfg) **remote_user will need to be changed to your username**
+  - [Ansible Hosts File](config_files/hosts) **This is where you define the webservers and elkserver IPs.**
 
-
-- Copy the playbooks to the Ansible Control Node, in this case we are using the jumpbox.
-- Update the _____ file to include...
-- Run the playbook, and navigate to ____ to check that the installation worked as expected.
+Copy the playbooks to the Ansible Control Node /etc/ansible folder.
+  - [ELK Playbook](config_files/elk-playbook.yml) **remote_user will need to be changed to your username**
+  - [Filebeat Playbook](config_files/filebeat-playbook.yml)
+- Run the playbook 'ansible-playbook elk-playbook.yml', and navigate to ____ to check that the installation worked as expected.
 
 _TODO: Answer the following questions to fill in the blanks:_
 - _Which file is the playbook? Where do you copy it?_
