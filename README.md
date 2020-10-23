@@ -96,6 +96,8 @@ In order to use the playbook, you will need to have an Ansible already configure
 - Connect to the container `sudo docker container attach container_name`
 
 Configuration files needed for Ansible located in /etc/ansible:
+
+The configuration file tells ansible which admin username it should use for ssh connections. The host file is the list of all the IP addresses that should be used. Machines can be grouped under the header brackets so you can run confgiuarionts on certain groups or all together.
   - [Ansible Configuration File](config_files/ansible.cfg) **remote_user will need to be changed to your username**
   ```bash
   #remote_port    = 22
@@ -135,12 +137,5 @@ Scroll to line #1805 and replace the IP address with the IP address of your ELK 
 ![](Images/Line1805.png)
 
 After entering your information into the Filebeat configuration file, navigate to the /etc/ansible directory and run: `ansible-playbook filebeat-playbook.yml webservers`
-
-_TODO: Answer the following questions to fill in the blanks:_
-- _Which file is the playbook? Where do you copy it?_
-- _Which file do you update to make Ansible run the playbook on a specific machine? How do I specify which machine to install the ELK server on versus which to install Filebeat on?_
-- _Which URL do you navigate to in order to check that the ELK server is running?
-
-_As a **Bonus**, provide the specific commands the user will need to run to download the playbook, update the files, etc._
 
 ## Troubleshooting
