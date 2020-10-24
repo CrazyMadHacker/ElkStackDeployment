@@ -20,7 +20,7 @@ These files have been tested and used to generate a live ELK deployment on Azure
 
 The main purpose of this network is to expose a load-balanced and monitored instance of DVWA, the D*mn Vulnerable Web Application.
 
-Load balancing ensures that the application will be highly available, in addition to restricting inbound access to the network. The load balancers processes incoming traffic to be shared acorss the web servers. Access controls that are in place will ensure that only authorized users will be able to connect in the first place through the jump box into the virtual network. 
+Load balancing ensures that the application will be highly available, in addition to restricting inbound access to the network. The load balancers processes incoming traffic to be shared across the web servers. Access controls that are in place will ensure that only authorized users will be able to connect in the first place through the jump box into the virtual network. 
 
 Integrating an ELK server allows users to easily monitor the vulnerable VMs for changes to the file systems of the VMs on the network and system metrics.
 
@@ -55,14 +55,14 @@ A summary of the access policies in place can be found in the table below.
 
 ### Elk Configuration
 
-Ansible was used to automate configuration of the ELK machine. No configuration was performed manually, which is advantageous because ansible is easy to learn to configure and playbooks are written in YAML to automate all the configuration.
+Ansible was used to automate configuration of the ELK machine. No configuration was performed manually, which is advantageous because Ansible is easy to learn to configure and playbooks are written in YAML to automate all the configuration.
 
 The playbook implements the following tasks:
-- Install or update docker to the latest version
-- Install PIP that manages required dependancies
-- Install python interperter to execute python programs
+- Install or update Docker to the latest version
+- Install PIP that manages required dependencies
+- Install python interpreter to execute python programs
 - Increase memory count to meet [prerequisites for ELK](https://elk-docker.readthedocs.io/#prerequisites)
-- Download and launch docker elk container
+- Download and launch Docker elk container
 
 The following screenshot displays the result of running `docker ps` after successfully configuring the ELK instance.
 
@@ -80,12 +80,12 @@ We have installed the following Beats on these machines:
 - Metricbeat
 
 These Beats allow us to collect the following information from each machine:
-- **Filebeat**: Monitors log files or locations you specify on remote machines that its installed on. 
-- **Metricbeat**: Detects changes in systesm metrics and different types of error events.
+- **Filebeat**: Monitors log files or locations you specify on remote machines that its installed on. All the logs are gathered in a central location which makes it easy to search for any suspicious log activity or changes to the file system that are unusual.
+- **Metricbeat**: Detects changes in systesm metrics and different types of error events. It's helpful to watch random CPU spikes that could be anything from resources not being distributed correctly to a crypto miner.
 
 ### Using the Playbooks
 
-Playbooks are the To-Do list for Ansible that contain the steps to execute on the servers. In this case, our playbooks are going to download, install and configure our ELK and beats deployment. The playbooks need to be copied to the /etc/ansible directory and it's important that the path and file name of the config files match whats in the playbook.
+Playbooks are the To-Do list for Ansible that contain the steps to execute on the servers. In this case, our playbooks are going to download, install and configure our ELK and beats deployment. The playbooks need to be copied to the /etc/ansible directory and it's important that the path and file name of the config files match what’s in the playbook.
 
   
 In order to use the playbook, you will need to have an Ansible already configured. We are using the jumpbox for this purpose.  
@@ -97,7 +97,7 @@ In order to use the playbook, you will need to have an Ansible already configure
 
 Configuration files needed for Ansible located in /etc/ansible:
 
-The configuration file tells ansible which admin username it should use for ssh connections. The host file is the list of all the IP addresses that should be used. Machines can be grouped under the header brackets so you can run confgiuarionts on certain groups or all together.
+The configuration file tells Ansible which admin username it should use for ssh connections. The host file is the list of all the IP addresses that should be used. Machines can be grouped under the header brackets so you can run configuration on certain groups or altogether.
   - [Ansible Configuration File](config_files/ansible.cfg) **remote_user will need to be changed to your username**
   ```bash
   #remote_port    = 22
