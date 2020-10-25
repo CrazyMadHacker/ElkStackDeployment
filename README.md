@@ -98,7 +98,8 @@ In order to use the playbook, you will need to have an Ansible already configure
 Configuration files needed for Ansible need to be copied to /etc/ansible:
 
 The configuration file tells Ansible which admin username it should use for ssh connections. The host file is the list of all the IP addresses that should be used. Machines can be grouped under the header brackets so you can run configuration on certain groups or altogether.
-  - [Ansible Configuration File](config_files/ansible.cfg) **remote_user will need to be changed to your username**
+  - [Ansible Configuration File](config_files/ansible.cfg) 
+     -  **remote_user will need to be changed to your username**
   ```bash
   #remote_port    = 22
 #module_lang    = C
