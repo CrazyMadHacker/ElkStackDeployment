@@ -85,17 +85,17 @@ These Beats allow us to collect the following information from each machine:
 
 ### Using the Playbooks
 
-Playbooks are the To-Do list for Ansible that contain the steps to execute on the servers. In this case, our playbooks are going to download, install and configure our ELK and beats deployment. The playbooks need to be copied to the /etc/ansible directory and it's important that the path and file name of the config files match what’s in the playbook.
+Playbooks are the To-Do list for Ansible that contain the steps to execute on the servers. In this case, our playbooks are going to download, install and configure our ELK and beats deployment. 
 
   
 In order to use the playbook, you will need to have an Ansible already configured. We are using the jumpbox for this purpose.  
 
 - SSH into the jumpbox `ssh username@jump.box.ip`
 - Locate the container name `sudo docker container list -a`
-- Start the container `sudo docker container start container_name`
-- Connect to the container `sudo docker container attach container_name`
+- Start the container `sudo docker container start [container_name]`
+- Connect to the container `sudo docker container attach [container_name]`
 
-Configuration files needed for Ansible located in /etc/ansible:
+Configuration files needed for Ansible need to be copied to /etc/ansible:
 
 The configuration file tells Ansible which admin username it should use for ssh connections. The host file is the list of all the IP addresses that should be used. Machines can be grouped under the header brackets so you can run configuration on certain groups or altogether.
   - [Ansible Configuration File](config_files/ansible.cfg) **remote_user will need to be changed to your username**
@@ -105,7 +105,8 @@ The configuration file tells Ansible which admin username it should use for ssh 
 #module_set_locale = False
 remote_user = #CHANGE TO YOUR USERNAME
 ```
-  - [Ansible Hosts File](config_files/hosts) **This is where you define the [webservers] and [elkserver] IPs.**
+  - [Ansible Hosts File](config_files/hosts) 
+    - **This is where you define the [webservers] and [elkserver] IPs.**
 ```bash
 # List the IP Addresses of your webservers
 # You should have at least 2 IP addresses
@@ -120,7 +121,8 @@ X.X.X.X ansible_python_interpreter=/usr/bin/python3
 X.X.X.X ansible_python_interpreter=/usr/bin/python3
 ```
 Copy the playbooks to the /etc/ansible folder.
-  - [ELK Playbook](config_files/elk-playbook.yml) **remote_user will need to be changed to your username**
+  - [ELK Playbook](config_files/elk-playbook.yml) 
+    - **remote_user will need to be changed to your username**
   ```bash
   hosts: elkservers
   remote_user: ##CHANGE TO YOUR USERNAME
@@ -137,5 +139,3 @@ Scroll to line #1805 and replace the IP address with the IP address of your ELK 
 ![](Images/Line1805.png)
 
 After entering your information into the Filebeat configuration file, navigate to the /etc/ansible directory and run: `ansible-playbook filebeat-playbook.yml webservers`
-
-## Troubleshooting
