@@ -140,3 +140,5 @@ Scroll to line #1805 and replace the IP address with the IP address of your ELK 
 ![](Images/Line1805.png)
 
 After entering your information into the Filebeat configuration file, navigate to the /etc/ansible directory and run: `ansible-playbook filebeat-playbook.yml webservers`
+
+Then, run: curl http://10.0.0.8:5601. This is the address of Kibana. If the installation succeeded, this command should print HTML to the console.
